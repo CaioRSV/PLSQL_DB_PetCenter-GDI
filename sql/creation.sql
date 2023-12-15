@@ -1,8 +1,6 @@
 CREATE TABLE Endereco (
     cep VARCHAR2(50),
     rua VARCHAR2(50),
-    numero INTEGER,
-    complemento VARCHAR2(50),
     bairro VARCHAR2(50),
     cidade VARCHAR2(50),
 
