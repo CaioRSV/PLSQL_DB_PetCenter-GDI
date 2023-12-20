@@ -76,7 +76,7 @@ SELECT t.numero FROM (Pessoa p INNER JOIN Telefone t ON t.cpf = p.cpf) UNION (SE
 -- CREATE VIEW
 CREATE VIEW DadosFuncionarios AS (SELECT cpf, email, cargo FROM Funcionario);
 SELECT * FROM DadosFuncionarios;
-
+/
 -------------------------------------------- PL ------------------------------------------------
 -- RECORD
 DECLARE
@@ -85,7 +85,7 @@ BEGIN
     SELECT * INTO rowDadosAtual FROM Pessoa WHERE nome='Fulano';
     DBMS_OUTPUT.PUT_LINE(rowDadosAtual.nome || ' - ' || rowDadosAtual.cpf);
 END;
-
+/
 -- USO DE ESTRUTURA DE DADOS DO TIPO TABLE
 DECLARE
     TYPE clientesDoMes IS TABLE OF VARCHAR2(50);
@@ -95,7 +95,7 @@ BEGIN
 	DBMS_OUTPUT.PUT_LINE(clientesMes_Atual(2));
 	DBMS_OUTPUT.PUT_LINE(clientesMes_Atual(3));
 END;
-
+/
 -- BLOCO ANÔNIMO
 
 DECLARE
@@ -103,7 +103,7 @@ DECLARE
 BEGIN 
     DBMS_OUTPUT.PUT_LINE(varTeste);
 END;
-
+/
 -- CREATE PROCEDURE
 
 CREATE OR REPLACE PROCEDURE mostrarMaiorPreco
@@ -208,7 +208,7 @@ BEGIN
 
 	DBMS_OUTPUT.PUT_LINE('CPF do cliente com zero créditos: ' || pessoaZeroCreditos);
 END;
-
+/
 -- WHILE LOOP
 DECLARE
     contador NUMBER := 1;
@@ -229,14 +229,14 @@ BEGIN
     END LOOP;
 END;
 
-
+/
 -- FOR IN LOOP
 BEGIN
 	FOR clienteAtual IN (SELECT cpf, creditos FROM Cliente) LOOP
 		DBMS_OUTPUT.PUT_LINE('CPF Cliente: ' || clienteAtual.cpf || ' // ' || 'Creditos do cliente: ' || clienteAtual.creditos);
     END LOOP;
 END;
-
+/
 -- SELECT...INTO
 DECLARE
     contador NUMBER := 0;
@@ -244,7 +244,7 @@ BEGIN
 	SELECT COUNT(*) INTO contador FROM Pessoa;
 	DBMS_OUTPUT.PUT_LINE('Quantidade de pessoas registradas: ' || contador);
 END;
-
+/
 -- CURSOR (OPEN, FETCH e CLOSE)
 
 DECLARE 
@@ -262,7 +262,7 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(varCPF || ' - ' || varNome || ' - ' || varRaca); 
     CLOSE cursorPets; 
 END; 
-
+/
 -- EXCEPTION WHEN
 DECLARE
     resultVar VARCHAR2(50) := '';
@@ -274,7 +274,7 @@ BEGIN
         WHEN OTHERS THEN
         	DBMS_OUTPUT.PUT_LINE('Qualquer outro erro');
 END;
-
+/
 --USO DE PAR METROS (IN, OUT ou IN OUT) / CREATE OR REPLACE PACKAGE / CREATE OR REPLACE PACKAGE BODY
 CREATE OR REPLACE PACKAGE GrupaoProcedures AS
     PROCEDURE mostrarMaiorPreco_MaiorQue (x IN NUMBER);
@@ -308,7 +308,7 @@ BEGIN
 	GrupaoProcedures.mostrarMaiorPreco_MaiorQue(150);
 	GrupaoProcedures.analisarPrecoMedio();
 END;
-
+/
 -- CREATE OR REPLACE TRIGGER (COMANDO) / CREATE OR REPLACE TRIGGER (LINHA)
 
 SELECT * FROM Equipamento;
@@ -323,5 +323,4 @@ END;
 INSERT INTO Equipamento (id, nome, marca, observacoes, grau_desgaste, quantidade_usos, vida_util) VALUES ('E#-1', '?', '?', '?', '?', 0, NULL);
 
 SELECT * FROM Equipamento;
-
 
