@@ -40,7 +40,7 @@ INSERT INTO Funcionario (cpf, cargo, salario, email, senha, data_contratacao, su
 
 INSERT INTO Funcionario (cpf, cargo, salario, email, senha, data_contratacao, supervisor) VALUES ('123456789-01', 'Veterinário', 5000.05, 'fulano.@gmail.com', '123', TO_DATE('05/03/2023', 'DD-MM-YYYY'), '123456789-03');
 
-INSERT INTO Funcionario (cpf, cargo, salario, email, senha, data_contratacao, supervisor) VALUES ('123456789-04', 'Vendedor', 1300.00, 'higgins.@gmail.com', '123', TO_DATE('07/03/2023', 'DD-MM-YYYY'), '123456789-04');
+INSERT INTO Funcionario (cpf, cargo, salario, email, senha, data_contratacao, supervisor) VALUES ('123456789-04', 'Vendedor', 1300.00, 'higgins.@gmail.com', '123', TO_DATE('07/03/2023', 'DD-MM-YYYY'), '123456789-01');
 
 SELECT * FROM Funcionario;
 
