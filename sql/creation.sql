@@ -10,6 +10,7 @@ CREATE TABLE Endereco (
     rua VARCHAR2(50),
     bairro VARCHAR2(50),
     cidade VARCHAR2(50),
+    numero_residencia NUMBER,
 
     CONSTRAINT enderecoPK PRIMARY KEY (cep)
 );
