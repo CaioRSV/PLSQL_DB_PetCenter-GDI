@@ -43,4 +43,38 @@ SELECT cpf, creditos FROM Cliente WHERE creditos=(SELECT MIN(creditos) FROM Clie
 -- AVG
 SELECT * FROM Produto WHERE preco>=(SELECT AVG(preco) FROM Produto); 
 
+-- COUNT 
+SELECT COUNT(*) FROM Funcionario WHERE supervisor='123456789-01';
+
+-- LEFT ou RIGHT ou FULL OUTER JOIN (LEFT)
+SELECT p.nome, t.numero FROM (Pessoa p LEFT JOIN Telefone t ON t.cpf=p.cpf);
+
+-- SUBCONSULTA COM OPERADOR RELACIONAL
+SELECT cpf, creditos FROM Cliente WHERE creditos=(SELECT MAX(creditos) FROM Cliente);
+
+-- SUBCONSULTA COM IN
+SELECT * FROM Pet WHERE raca IN (SELECT raca FROM DetalhesRaca WHERE especie IN ('Cachorro', 'Gato'));
+
+-- SUBCONSULTA COM ANY
+SELECT * FROM Pet WHERE raca = ANY (SELECT raca FROM DetalhesRaca WHERE especie IN ('Peixe', 'Galo'));
+
+-- SUBCONSULTA COM ALL
+SELECT * FROM Produto WHERE 0 < ALL (SELECT preco FROM Produto);
+
+-- ORDER BY
+SELECT nome FROM Pessoa ORDER BY nome;
+
+-- GROUP BY
+SELECT genero, COUNT(nome) FROM Pessoa GROUP BY genero;
+
+-- HAVING
+SELECT genero, COUNT(nome) FROM Pessoa GROUP BY genero HAVING COUNT(nome)>1;
+
+-- UNION ou INTERSECT ou MINUS (UNION)
+SELECT t.numero FROM (Pessoa p INNER JOIN Telefone t ON t.cpf = p.cpf) UNION (SELECT numero FROM Telefone);
+
+-- CREATE VIEW
+CREATE VIEW DadosFuncionarios AS (SELECT cpf, email, cargo FROM Funcionario);
+SELECT * FROM DadosFuncionarios;
+
 -- 
