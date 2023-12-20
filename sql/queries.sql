@@ -245,17 +245,68 @@ BEGIN
 	DBMS_OUTPUT.PUT_LINE('Quantidade de pessoas registradas: ' || contador);
 END;
 
--- 
+-- CURSOR (OPEN, FETCH e CLOSE)
 
+DECLARE 
+    CURSOR cursorPets IS 
+        SELECT cpf_Responsavel, nome, raca FROM Pet; 
+ 
+    varCPF Pet.cpf_Responsavel%TYPE; 
+    varNome Pet.nome%TYPE; 
+    varRaca Pet.raca%TYPE; 
+ 
+BEGIN 
+    OPEN cursorPets; 
+        FETCH cursorPets INTO varCPF, varNome, varRaca; 
+ 
+        DBMS_OUTPUT.PUT_LINE(varCPF || ' - ' || varNome || ' - ' || varRaca); 
+    CLOSE cursorPets; 
+END; 
+
+-- EXCEPTION WHEN
 DECLARE
     resultVar VARCHAR2(50) := '';
 BEGIN
-	SELECT nome INTO resultVar FROM Pessoa WHERE cpf=NULL;
+	SELECT nome INTO resultVar FROM Pessoa WHERE cpf IS NULL;
 	EXCEPTION
-		WHEN NO_DATA_FOUND THEN:
-			DBMS_OUTPUT.PUT_LINE('Sem CPF encontrado');
-        WHEN OTHERS THEN:
+		WHEN NO_DATA_FOUND THEN
+			DBMS_OUTPUT.PUT_LINE('Não existem Pessoas com CPF nulo');
+        WHEN OTHERS THEN
         	DBMS_OUTPUT.PUT_LINE('Qualquer outro erro');
 END;
 
+--USO DE PAR METROS (IN, OUT ou IN OUT) / CREATE OR REPLACE PACKAGE / CREATE OR REPLACE PACKAGE BODY
+CREATE OR REPLACE PACKAGE GrupaoProcedures AS
+    PROCEDURE mostrarMaiorPreco_MaiorQue (x IN NUMBER);
+    PROCEDURE analisarPrecoMedio;
+END GrupaoProcedures;
+/
 
+CREATE OR REPLACE PACKAGE BODY GrupaoProcedures AS
+    PROCEDURE mostrarMaiorPreco_MaiorQue(x IN NUMBER) IS
+        resultVar NUMBER := 0;
+    BEGIN
+        SELECT MAX(preco) INTO resultVar FROM Produto WHERE preco>x;
+        DBMS_OUTPUT.PUT_LINE('Produto com o maior preço: ' || resultVar);
+    END mostrarMaiorPreco_MaiorQue;
+
+    PROCEDURE analisarPrecoMedio IS
+        resultVar NUMBER := 0;
+    BEGIN
+        SELECT AVG(preco) INTO resultVar FROM Produto;
+        IF resultVar >= 50 THEN
+            DBMS_OUTPUT.PUT_LINE('Média maior ou igual a 50');
+        ELSIF resultVar > 0 AND resultVar < 50 THEN
+            DBMS_OUTPUT.PUT_LINE('Média menor que 50');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Algo está errado. A média de preços é igual ou menor a 0.');
+        END IF;
+    END analisarPrecoMedio;
+END GrupaoProcedures;
+/
+BEGIN
+	GrupaoProcedures.mostrarMaiorPreco_MaiorQue(150);
+	GrupaoProcedures.analisarPrecoMedio();
+END;
+
+-- 
