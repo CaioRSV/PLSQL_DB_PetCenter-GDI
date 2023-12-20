@@ -247,5 +247,15 @@ END;
 
 -- 
 
+DECLARE
+    resultVar VARCHAR2(50) := '';
+BEGIN
+	SELECT nome INTO resultVar FROM Pessoa WHERE cpf=NULL;
+	EXCEPTION
+		WHEN NO_DATA_FOUND THEN:
+			DBMS_OUTPUT.PUT_LINE('Sem CPF encontrado');
+        WHEN OTHERS THEN:
+        	DBMS_OUTPUT.PUT_LINE('Qualquer outro erro');
+END;
 
 
