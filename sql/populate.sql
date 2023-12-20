@@ -31,6 +31,9 @@ INSERT INTO Telefone (cpf, numero) VALUES ('123456789-02', '35230001');
 INSERT INTO Telefone (cpf, numero) VALUES ('123456789-03', '33330000');
 INSERT INTO Telefone (cpf, numero) VALUES ('123456789-04', '44440000');
 INSERT INTO Telefone (cpf, numero) VALUES ('123456789-05', '55550000');
+INSERT INTO Telefone (cpf, numero) VALUES ('123456789-06', '35230001');
+
+
 
 SELECT * FROM Telefone;
 
