@@ -1,3 +1,10 @@
+CREATE SEQUENCE servicoNumSequence
+  START WITH 0
+  INCREMENT BY 1
+  MINVALUE 0
+  NOCACHE;
+
+---
 CREATE TABLE Endereco (
     cep VARCHAR2(50),
     rua VARCHAR2(50),
@@ -38,7 +45,9 @@ CREATE TABLE Funcionario (
     CONSTRAINT funcPessoaFK FOREIGN KEY (cpf) REFERENCES Pessoa(cpf),
 	CONSTRAINT funcPK PRIMARY KEY (cpf),
     
-    CONSTRAINT supervisaoFK FOREIGN KEY (supervisor) REFERENCES Funcionario(cpf)
+    CONSTRAINT supervisaoFK FOREIGN KEY (supervisor) REFERENCES Funcionario(cpf),
+
+    CONSTRAINT checkEmail CHECK ((email LIKE '%.com') OR (email LIKE '%.br'))
     
 );
 
