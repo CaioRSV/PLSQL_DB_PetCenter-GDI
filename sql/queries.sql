@@ -311,16 +311,25 @@ END;
 /
 -- CREATE OR REPLACE TRIGGER (COMANDO) / CREATE OR REPLACE TRIGGER (LINHA)
 
-SELECT * FROM Equipamento;
+CREATE OR REPLACE TRIGGER autodefinirStatusEquipamento
+BEFORE INSERT ON Equipamento
+BEGIN
+	DBMS_OUTPUT.PUT_LINE('Novo equipamento adicionado!');
+END;
+/
 
 CREATE OR REPLACE TRIGGER  autodefinirDataEquipamento
 BEFORE INSERT ON Equipamento
 FOR EACH ROW
 BEGIN
 	:NEW.data_aquisicao := SYSDATE;
+	:NEW.grau_desgaste := 'Nenhum';
+	:NEW.quantidade_usos := 0;
 END;
 /
-INSERT INTO Equipamento (id, nome, marca, observacoes, grau_desgaste, quantidade_usos, vida_util) VALUES ('E#-1', '?', '?', '?', '?', 0, NULL);
 
 SELECT * FROM Equipamento;
 
+INSERT INTO Equipamento (id, nome, marca, observacoes, vida_util) VALUES ('E#-1', '?', '?', '?', NULL);
+
+SELECT * FROM Equipamento;
