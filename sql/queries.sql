@@ -66,19 +66,19 @@ SELECT COUNT(*) FROM Funcionario WHERE supervisor='123456789-01';
 SELECT p.nome, t.numero FROM (Pessoa p RIGHT JOIN Telefone t ON t.cpf=p.cpf);
 
 -- SUBCONSULTA COM OPERADOR RELACIONAL
-	-- Com subconsulta SELECT dentro aí
+	-- Com subconsulta SELECT dentro aí q pega row do Cliente com maior n° de créditos
 SELECT cpf, creditos FROM Cliente WHERE creditos=(SELECT MAX(creditos) FROM Cliente);
 
 -- SUBCONSULTA COM IN
-	-- Com subconsulta com IN e outro SELECT
+	-- Com subconsulta com IN e outro SELECT pra pegar Pets que estão inseridos na tupla
 SELECT * FROM Pet WHERE raca IN (SELECT raca FROM DetalhesRaca WHERE especie IN ('Cachorro', 'Gato'));
 
 -- SUBCONSULTA COM ANY
-	-- Idem com ANY
+	-- Consulta com raça estando em qualquer row da sunconsulta que verifica se o Pet tem espécie dentro da tupla
 SELECT * FROM Pet WHERE raca = ANY (SELECT raca FROM DetalhesRaca WHERE especie IN ('Peixe', 'Galo'));
 
 -- SUBCONSULTA COM ALL
-	-- Idem com ALL
+	-- Consulta rows de Produto apenas se todos os produtos tiverem preço > 0
 SELECT * FROM Produto WHERE 0 < ALL (SELECT preco FROM Produto);
 
 -- ORDER BY
@@ -94,7 +94,7 @@ SELECT genero, COUNT(nome) FROM Pessoa GROUP BY genero;
 SELECT genero, COUNT(nome) FROM Pessoa GROUP BY genero HAVING COUNT(nome)>1;
 
 -- UNION ou INTERSECT ou MINUS (UNION)
-	-- Une duas só que exclui duplicatas de info
+	-- Une duas tabelas só que exclui duplicatas de info
 SELECT t.numero FROM (Pessoa p INNER JOIN Telefone t ON t.cpf = p.cpf) UNION (SELECT numero FROM Telefone);
 
 -- CREATE VIEW
@@ -113,7 +113,7 @@ BEGIN
 END;
 /
 -- USO DE ESTRUTURA DE DADOS DO TIPO TABLE
-	-- Cria tipo table
+	-- Cria tipo table e printa itens inseridos na definição de uma instância dele
 DECLARE
     TYPE clientesDoMes IS TABLE OF VARCHAR2(50);
     clientesMes_Atual clientesDoMes := clientesDoMes('Cicrana', 'Rachel', 'Beltrene');
@@ -124,7 +124,7 @@ BEGIN
 END;
 /
 -- BLOCO ANÔNIMO
-	-- Uso de Declare e Begin
+	-- Uso de Declare e Begin pra printar um texto qualquer
 DECLARE
     varTeste VARCHAR2(50) := 'texto_Teste_abcdefghijklmnopqrstuvwxyz';
 BEGIN 
@@ -165,7 +165,7 @@ BEGIN
 END;
 /
 -- %TYPE
-	-- VAR se adapta ao tipo estabelecido dps
+	-- VAR se adapta ao tipo estabelecido dps, printa cargo
 DECLARE
     nomeCargo funcionario.cargo%TYPE;
 BEGIN
@@ -175,7 +175,7 @@ END;
 /
 
 -- %ROWTYPE
-	-- VAR se adapta ao tipo da ROW referenciada
+	-- VAR se adapta ao tipo da ROW referenciada, printa dados de Pessoa com nome 'Fulano'
 DECLARE
     rowDadosAtual Pessoa%ROWTYPE;
 BEGIN
@@ -185,7 +185,7 @@ END;
 /
 
 -- IF ELSIF
-	-- Condicionais
+	-- Condicionais, utiliza para verificar se AVG do preço é >=50, <50 e >0, ou <0
 CREATE OR REPLACE PROCEDURE analisarPrecoMedio
 IS
     resultVar NUMBER := 0;
@@ -206,7 +206,7 @@ END;
 /
 
 -- CASE WHEN
-	-- Condicionais dnv só que com case when
+	-- Condicionais dnv só que com case when, utiliza para verificar se AVG do preço é >=30, <30 e >0, ou <0.
 CREATE OR REPLACE PROCEDURE analisarPrecoMedio_VersaoCase
 IS
     resultVar NUMBER := 0;
@@ -228,7 +228,7 @@ END;
 /
 
 --  LOOP EXIT WHEN
-	-- Condicional break loop
+	-- Condicional break loop, para quando encontra algué com zero créditos
 DECLARE
 	pessoaZeroCreditos VARCHAR2(50) := '';
 BEGIN
@@ -241,7 +241,7 @@ BEGIN
 END;
 /
 -- WHILE LOOP
-	-- Loop WHILE
+	-- Loop WHILE, verifica se os Pets são ou não cachorros
 DECLARE
     contador NUMBER := 1;
     especieDaVez DetalhesRaca.especie%TYPE;
@@ -263,7 +263,7 @@ END;
 
 /
 -- FOR IN LOOP
-	-- Loop FOR
+	-- Loop FOR, printa dados de clientes
 BEGIN
 	FOR clienteAtual IN (SELECT cpf, creditos FROM Cliente) LOOP
 		DBMS_OUTPUT.PUT_LINE('CPF Cliente: ' || clienteAtual.cpf || ' // ' || 'Creditos do cliente: ' || clienteAtual.creditos);
@@ -271,7 +271,7 @@ BEGIN
 END;
 /
 -- SELECT...INTO
-	-- SELECT armazenando em VAR definida antes
+	-- SELECT armazenando em VAR definida antes, conta quantidade de rows de Pessoa
 DECLARE
     contador NUMBER := 0;
 BEGIN
@@ -280,7 +280,7 @@ BEGIN
 END;
 /
 -- CURSOR (OPEN, FETCH e CLOSE)
-	-- Utilizando cursor, permite abrir ele e dar fetch nos valroes selecionados nas VARs definidas
+	-- Utilizando cursor, permite abrir ele e dar fetch nos valroes selecionados nas VARs definidas, printa dados de Pet
 DECLARE
     CURSOR cursorPets IS 
         SELECT cpf_Responsavel, nome, raca FROM Pet; 
@@ -312,6 +312,7 @@ END;
 /
 -- USO DE PAR METROS (IN, OUT ou IN OUT) / CREATE OR REPLACE PACKAGE / CREATE OR REPLACE PACKAGE BODY
 	-- Cria package e package body, com utilização de parametros de procedures por meio de IN
+	-- Funções: Uma mostra o maior preço que seja maior que algum parametro x, e a outra analisa o preço médio e printa baseado em condicionais
 CREATE OR REPLACE PACKAGE GrupaoProcedures AS
     PROCEDURE mostrarMaiorPreco_MaiorQue (x IN NUMBER);
     PROCEDURE analisarPrecoMedio;
