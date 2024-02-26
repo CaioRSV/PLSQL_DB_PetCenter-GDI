@@ -63,9 +63,9 @@ CREATE OR REPLACE TYPE funcionario_tp UNDER pessoa_tp(
 
     OVERRIDING MEMBER PROCEDURE get_pessoa_endereco (SELF funcionario_tp)
 );
-
+/
 CREATE OR REPLACE TYPE BODY funcionario_tp AS
-    MEMBER PROCEDURE get_pessoa_endereco (SELF funcionario_tp)
+    MEMBER PROCEDURE get_pessoa_endereco
     BEGIN
     	DBMS_OUTPUT.PUT_LINE('CPF: ' || SELF.cpf);
 		DBMS_OUTPUT.PUT_LINE('Erro! Não pode se acessar endereço de funcionários.');
@@ -86,16 +86,16 @@ CREATE OR REPLACE TYPE detalhesRaca_tp AS OBJECT(
     especie VARCHAR2(50),
 
     CONSTRUCTOR FUNCTION detalhesRaca_tp(
-        raca VARCHAR2(50),
-        especie VARCHAR2(50)
+        raca VARCHAR2,
+        especie VARCHAR2
     ) RETURN SELF AS RESULT
     
 );
-
+/
 CREATE OR REPLACE TYPE BODY detalhesRaca_tp AS
     CONSTRUCTOR FUNCTION detalhesRaca_tp(
-        raca VARCHAR2(50),
-        especie VARCHAR2(50)
+        raca VARCHAR2,
+        especie VARCHAR2
     ) RETURN SELF AS RESULT
     IS
     BEGIN
@@ -112,7 +112,7 @@ CREATE OR REPLACE TYPE pet_tp AS OBJECT(
     raca VARCHAR2(50),
     data_nascimento DATE,
     genero VARCHAR2(50),
-    observacoes VARCHAR2(50),
+    observacoes VARCHAR2(50)
 );
 /
 CREATE OR REPLACE TYPE atendimento_tp AS OBJECT(
@@ -160,9 +160,10 @@ CREATE OR REPLACE TYPE BODY equipamento_tp AS
     MEMBER FUNCTION equipValidadeRestante RETURN INTEGER IS
     expectedLifeTime INTEGER := self.vida_util - self.quantidade_usos;
     BEGIN
-    	return expectedLifeTime;
+        return expectedLifeTime;
     END;
-    	
+END;
+
 /
 CREATE OR REPLACE TYPE presta_tp AS OBJECT(
     cpf_Cliente VARCHAR2(50),
