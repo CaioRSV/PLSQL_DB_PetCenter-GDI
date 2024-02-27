@@ -113,8 +113,23 @@ CREATE OR REPLACE TYPE pet_tp AS OBJECT(
     raca REF detalhesRaca_tp,
     data_nascimento DATE,
     genero VARCHAR2(50),
-    observacoes VARCHAR2(50)
+    observacoes VARCHAR2(50),
+
+    MEMBER FUNCTION compararIdadesPets(pet1 pet_tp) RETURN NUMBER
 );
+/
+CREATE OR REPLACE TYPE BODY pet_tp AS
+    MEMBER FUNCTION compararIdadesPets(pet1 pet_tp) RETURN NUMBER IS
+    BEGIN
+    	IF self.data_nascimento < pet1.data_nascmento THEN
+    		RETURN -1;
+		ELSIF self.data_nascimento > pet1.data_nascimento THEN
+            RETURN 1;
+		ELSE
+            RETURN 0;
+		END IF;
+	END;
+END;
 /
 CREATE OR REPLACE TYPE atendimento_tp AS OBJECT(
     cpf_Cliente REF cliente_tp,
