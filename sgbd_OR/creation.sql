@@ -16,11 +16,12 @@ CREATE OR REPLACE TYPE endereco_tp AS OBJECT(
 );
 /
 -- Telefone
-CREATE OR REPLACE TYPE varray_telefone AS VARRAY(2) OF telefone_tp;
-/
 CREATE OR REPLACE TYPE telefone_tp AS OBJECT(
     	numero VARCHAR2(50)
 );
+/
+CREATE OR REPLACE TYPE varray_telefone AS VARRAY(2) OF telefone_tp;
+
 /
 
 -- Pessoa
@@ -29,24 +30,24 @@ CREATE OR REPLACE TYPE pessoa_tp AS OBJECT(
 	nome VARCHAR2(50),
     data_de_nascimento DATE,
     genero VARCHAR2(50),
-    cep REF endereco_tp,
+    endereco endereco_tp,
     telefones varray_telefone,
 
     MEMBER PROCEDURE get_pessoa_endereco (SELF pessoa_tp),
     FINAL MEMBER PROCEDURE get_pessoa_info (SELF pessoa_tp)
-) NOT FINAL;
+) NOT FINAL NOT INSTANTIABLE;
 /
     
 CREATE OR REPLACE TYPE BODY pessoa_tp AS
-    MEMBER PROCEDURE get_pessoa_endereco (SELF pessoa_tp) IS
+    MEMBER PROCEDURE get_pessoa_endereco ( SELF pessoa_tp) IS
     BEGIN
 		DBMS_OUTPUT.PUT_LINE('CPF: ' || SELF.cpf);
-		DBMS_OUTPUT.PUT_LINE('CEP: ' || SELF.cep);
+		DBMS_OUTPUT.PUT_LINE('CEP: ' || SELF.endereco.cep);
     END;
     FINAL MEMBER PROCEDURE get_pessoa_info (SELF pessoa_tp) IS
     BEGIN
     	DBMS_OUTPUT.PUT_LINE('Nome: ' || SELF.nome);
-		DBMS_OUTPUT.PUT_LINE('Data de Nascimento: ' || SELF.data_de_nascimento);
+        DBMS_OUTPUT.PUT_LINE('Data de Nascimento: ' || TO_CHAR(SELF.data_de_nascimento, 'DD-MON-YYYY'));
     END;
 END;
 
@@ -64,13 +65,6 @@ CREATE OR REPLACE TYPE funcionario_tp UNDER pessoa_tp(
 
     OVERRIDING MEMBER PROCEDURE get_pessoa_endereco (SELF funcionario_tp)
 );
-/
-CREATE OR REPLACE TYPE BODY funcionario_tp AS
-    MEMBER PROCEDURE get_pessoa_endereco
-    BEGIN
-    	DBMS_OUTPUT.PUT_LINE('CPF: ' || SELF.cpf);
-		DBMS_OUTPUT.PUT_LINE('Erro! Não pode se acessar endereço de funcionários.');
-    END;
     
 /
 
@@ -91,7 +85,7 @@ CREATE OR REPLACE TYPE detalhesRaca_tp AS OBJECT(
         especie VARCHAR2
     ) RETURN SELF AS RESULT
     
-)NOT INSTANTIABLE;
+);
 /
 CREATE OR REPLACE TYPE BODY detalhesRaca_tp AS
     CONSTRUCTOR FUNCTION detalhesRaca_tp(
@@ -121,7 +115,7 @@ CREATE OR REPLACE TYPE pet_tp AS OBJECT(
 CREATE OR REPLACE TYPE BODY pet_tp AS
     MEMBER FUNCTION compararIdadesPets(pet1 pet_tp) RETURN NUMBER IS
     BEGIN
-    	IF self.data_nascimento < pet1.data_nascmento THEN
+    	IF self.data_nascimento < pet1.data_nascimento THEN
     		RETURN -1;
 		ELSIF self.data_nascimento > pet1.data_nascimento THEN
             RETURN 1;
@@ -157,8 +151,22 @@ CREATE OR REPLACE TYPE produto_tp AS OBJECT(
     preco NUMBER,
     quantidade NUMBER,
     marca VARCHAR2(50),
-    caracteristicas caracteristicas_list
+    caracteristicas caracteristicas_list,
+
+    MEMBER FUNCTION calc_PrecoEstoque RETURN NUMBER
 );
+/
+
+CREATE OR REPLACE TYPE BODY produto_tp AS
+    MEMBER FUNCTION calc_PrecoEstoque RETURN NUMBER IS
+        total_price NUMBER := 0;
+    BEGIN
+        FOR i IN 1..self.caracteristicas.COUNT LOOP
+            total_price := total_price + self.preco * self.quantidade;
+        END LOOP;
+        RETURN total_price;
+    END;
+END;
 /
     
 ALTER TYPE produto_tp ADD ATTRIBUTE(categoria VARCHAR2(50)) CASCADE;
@@ -221,7 +229,7 @@ CREATE TABLE Pessoa of pessoa_tp(
 	nome NOT NULL,
     data_de_nascimento NOT NULL,
     genero NOT NULL,
-    cep WITH ROWID REFERENCES Endereco
+    endereco NOT NULL
 );
 /
 --
@@ -231,16 +239,16 @@ CREATE TABLE Funcionario of funcionario_tp(
     email NOT NULL,
     senha NOT NULL,
     data_contratacao NOT NULL,
-    supervisor SCOPE IS funcionario_tp,
+    supervisor SCOPE IS Funcionario,
 
-    CONSTRAINT PRIMARY KEY Funcionario_PK (cpf)
+    CONSTRAINT Funcionario_PK PRIMARY KEY (cpf)
 );
 /
 --
 CREATE TABLE Cliente of cliente_tp(
     data_primeiro_atendimento NOT NULL,
     creditos NOT NULL,
-    CONSTRAINT PRIMARY KEY Funcionario_PK (cpf)
+    CONSTRAINT Cliente_PK PRIMARY KEY (cpf)
 );
 /
 --
@@ -270,7 +278,7 @@ CREATE TABLE Atendimento of atendimento_tp(
 /
 --
 CREATE TABLE Servico OF servico_tp(
-    codigo NOT NULL,
+    codigo PRIMARY KEY,
     nome NOT NULL,
     descricao NOT NULL,
     custo NOT NULL,
@@ -280,16 +288,13 @@ CREATE TABLE Servico OF servico_tp(
 );
 /
 --
-
 CREATE TABLE Produto of produto_tp(
-    id NOT NULL,
+    id PRIMARY KEY,
     nome NOT NULL,
     preco NOT NULL,
     quantidade NOT NULL,
     marca NOT NULL,
-    categoria NOT NULL,
+    categoria NOT NULL
 ) NESTED TABLE caracteristicas STORE AS NT_CaracteristicasProduto;
-
-
-
+/
  
