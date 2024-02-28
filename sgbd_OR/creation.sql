@@ -35,7 +35,7 @@ CREATE OR REPLACE TYPE pessoa_tp AS OBJECT(
 
     MEMBER PROCEDURE get_pessoa_endereco (SELF pessoa_tp),
     FINAL MEMBER PROCEDURE get_pessoa_info (SELF pessoa_tp)
-) NOT FINAL NOT INSTANTIABLE;
+) NOT FINAL;
 /
     
 CREATE OR REPLACE TYPE BODY pessoa_tp AS
