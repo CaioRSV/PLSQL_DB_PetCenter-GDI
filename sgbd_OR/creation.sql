@@ -193,18 +193,18 @@ CREATE OR REPLACE TYPE BODY equipamento_tp AS
         return expectedLifeTime;
     END;
 END;
+/
+--
+CREATE OR REPLACE TYPE presta_tp AS OBJECT(
+    cpf_Cliente REF cliente_Tp,
+    nome_Pet VARCHAR2(50),
+    codigo_Servico REF servico_tp,
+    cpf_Funcionario REF funcionario_tp
+);
 
 /
-CREATE OR REPLACE TYPE presta_tp AS OBJECT(
-    cpf_Cliente VARCHAR2(50),
-    nome_Pet VARCHAR2(50),
-    codigo_Servico VARCHAR2(50),
-    cpf_Funcionario VARCHAR2(50)
-    
-);
-/
 CREATE OR REPLACE TYPE vende_tp AS OBJECT(
-    cpf_Cliente VARCHAR2(50),
+    cpf_Cliente REF cliente_tp,
     data_atendimento DATE,
     id_Produto VARCHAR2(50)
 );
@@ -299,4 +299,31 @@ CREATE TABLE Produto of produto_tp(
     categoria NOT NULL
 ) NESTED TABLE caracteristicas STORE AS NT_CaracteristicasProduto;
 /
- 
+--
+CREATE TABLE Equipamento OF equipamento_tp(
+    id PRIMARY KEY,
+    nome NOT NULL,
+    marca NOT NULL,
+    observacoes NOT NULL,
+    data_aquisicao NOT NULL,
+    grau_desgaste NOT NULL,
+    quantidade_usos NOT NULL,
+    vida_util NOT NULL
+);
+/
+--
+CREATE TABLE Presta of presta_tp(
+    cpf_Cliente WITH ROWID REFERENCES Cliente,
+    nome_Pet NOT NULL,
+    codigo_Servico WITH ROWID REFERENCES Servico,
+    cpf_Funcionario WITH ROWID REFERENCES Funcionario
+    
+);
+/
+--
+CREATE TABLE Vende OF vende_tp(
+    cpf_Cliente WITH ROWID REFERENCES Cliente,
+    data_atendimento NOT NULL,
+    id_Produto NOT NULL
+);
+/
