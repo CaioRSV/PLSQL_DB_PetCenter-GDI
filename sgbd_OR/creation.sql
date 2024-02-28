@@ -108,6 +108,7 @@ CREATE OR REPLACE TYPE pet_tp AS OBJECT(
     data_nascimento DATE,
     genero VARCHAR2(50),
     observacoes VARCHAR2(50),
+    funcionarioResp REF funcionario_tp,
 
     MEMBER FUNCTION compararIdadesPets(pet1 pet_tp) RETURN NUMBER
 );
@@ -264,7 +265,8 @@ CREATE TABLE Pet of pet_tp(
     raca WITH ROWID REFERENCES DetalhesRaca,
     data_nascimento NOT NULL,
     genero NOT NULL,
-    observacoes NOT NULL
+    observacoes NOT NULL,
+    funcionarioResp WITH ROWID REFERENCES Funcionario
 );
 /
 --
