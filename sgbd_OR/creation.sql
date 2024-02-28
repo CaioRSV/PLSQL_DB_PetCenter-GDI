@@ -209,6 +209,12 @@ CREATE OR REPLACE TYPE vende_tp AS OBJECT(
     id_Produto VARCHAR2(50)
 );
 /
+--
+CREATE OR REPLACE TYPE ser_tp AS OBJECT(
+	nome VARCHAR2(50)
+) NOT FINAL NOT INSTANTIABLE; -- Não instanciável
+--
+/
 -- Criação de instâncias das tabelas
 
 CREATE TABLE Endereco of endereco_tp(
