@@ -28,3 +28,36 @@ SELECT p.nome, DEREF(p.cpf_Responsavel).nome FROM Pet p;
 
 --- Consulta a NESTED TABLE / Consulta a Características
 SELECT c.column_value AS caracteristicas FROM Produto p CROSS JOIN TABLE(p.caracteristicas) c;
+
+
+
+-------------------------- Procedures e Functions
+--get_pessoa_endereco/get_pessoa_info
+DECLARE
+    pessoaEx pessoa_tp;
+BEGIN
+    SELECT VALUE(p) INTO pessoaEx FROM Pessoa p WHERE p.cpf='123456789-01';
+	pessoaEx.get_pessoa_endereco;
+	DBMS_OUTPUT.PUT_LINE('-----');
+	pessoaEx.get_pessoa_info;
+	DBMS_OUTPUT.PUT_LINE('-----');
+END;
+/
+--Constructor Function DetalhesRaca
+DECLARE
+    detalhesRacaEx detalhesRaca_tp;
+	racaEx VARCHAR2(50);
+    especieEx VARCHAR2(50);
+	
+BEGIN
+    racaEx := 'Cachorro';
+	especieEx := 'Husky';
+	detalhesRacaEx := detalhesRaca_tp(racaEx, especieEx);
+	DBMS_OUTPUT.PUT_LINE('Raça: '|| detalhesRacaEx.raca || ' / Especie: ' || detalhesRacaEx.especie);
+	COMMIT;
+END;
+/
+--
+
+
+-- Parei em compararIdadesPets (linha 104)
