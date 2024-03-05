@@ -60,4 +60,43 @@ END;
 --
 
 
--- Parei em compararIdadesPets (linha 104)
+-- compararIdadesPets
+DECLARE
+    pet1 pet_tp;
+    pet2 pet_tp;
+    result NUMBER;
+BEGIN
+
+    pet1 := pet_tp(null, 'Destruidor', null, TO_DATE('15/10/2023','DD-MM-YYYY'),  'Macho', 'Muito amigável', null);
+    pet2 := pet_tp(null, 'Florzinha', null, TO_DATE('01/01/2023', 'DD-MM-YYYY'),  'Fêmea', 'Extremamente perigosa', null);
+
+    result := pet1.compararIdadesPets(pet2);
+
+    -- Use the result as needed
+    DBMS_OUTPUT.PUT_LINE('O pet 2 é mais velho? (1 = Sim,  -1 = Não): ' || result);
+END;
+/
+
+--calc_PrecoEstoque
+DECLARE
+    produto produto_tp;
+    listaCaracteristicas caracteristicas_list := caracteristicas_list('caracteristica1', 'caracteristica2', 'caracteristica3');
+    precoTotal NUMBER;
+
+BEGIN
+    produto := produto_tp('P#001','Osso de brinquedo', 40, 33, 'HappyPup', listaCaracteristicas, 'Brinquedos');
+    precoTotal := produto.calc_PrecoEstoque();
+    DBMS_OUTPUT.PUT_LINE('Total price of stock: ' || precoTotal);
+END;
+/
+
+--equipValidadeRestante
+DECLARE
+	expectativaVidaRestante INTEGER;
+	equipEx equipamento_tp;
+BEGIN
+	equipEx := equipamento_tp('E#001', 'Banheira', 'PetFurniture', 'Grande', TO_DATE('04/03/2023','DD-MM-YYYY'), 'Leve', 15, 100);
+	expectativaVidaRestante := equipEx.equipValidadeRestante;
+	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restande do equipamento: '|| expectativaVidaRestante ||' dias.');
+END;
+
