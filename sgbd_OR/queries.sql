@@ -97,7 +97,7 @@ DECLARE
 BEGIN
 	equipEx := equipamento_tp('E#001', 'Banheira', 'PetFurniture', 'Grande', TO_DATE('04/03/2023','DD-MM-YYYY'), 'Leve', 15, 100);
 	expectativaVidaRestante := equipEx.equipValidadeRestante;
-	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restande do equipamento: '|| expectativaVidaRestante ||' dias.');
+	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restante do equipamento: '|| expectativaVidaRestante ||' dias.');
 END;
 
 /
