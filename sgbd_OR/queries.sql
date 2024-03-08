@@ -100,3 +100,30 @@ BEGIN
 	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restande do equipamento: '|| expectativaVidaRestante ||' dias.');
 END;
 
+/
+    
+--------------------- Resto de Consultas Individuais das Tabelas ---------------------
+
+SELECT * FROM Endereco;
+/
+SELECT * FROM Telefone;
+/
+SELECT * FROM Pessoa;
+/
+SELECT nome, cargo FROM Funcionario;
+/
+SELECT nome, creditos FROM Cliente;
+/
+SELECT * FROM DetalhesRaca;
+/
+SELECT nome, observacoes FROM Pet;
+/
+SELECT metodo_pagamento FROM Atendimento;
+/
+SELECT codigo FROM Servico;
+/
+SELECT nome_Pet FROM Presta;
+/
+SELECT * FROM Produto;
+/
+SELECT * FROM Equipamento;
