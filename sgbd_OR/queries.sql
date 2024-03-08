@@ -86,7 +86,7 @@ DECLARE
 BEGIN
     produto := produto_tp('P#001','Osso de brinquedo', 40, 33, 'HappyPup', listaCaracteristicas, 'Brinquedos');
     precoTotal := produto.calc_PrecoEstoque();
-    DBMS_OUTPUT.PUT_LINE('Total price of stock: ' || precoTotal);
+    DBMS_OUTPUT.PUT_LINE('Preço total do estoque: ' || precoTotal);
 END;
 /
 
@@ -97,7 +97,7 @@ DECLARE
 BEGIN
 	equipEx := equipamento_tp('E#001', 'Banheira', 'PetFurniture', 'Grande', TO_DATE('04/03/2023','DD-MM-YYYY'), 'Leve', 15, 100);
 	expectativaVidaRestante := equipEx.equipValidadeRestante;
-	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restande do equipamento: '|| expectativaVidaRestante ||' dias.');
+	DBMS_OUTPUT.PUT_LINE('Expectativa de vida restante do equipamento: '|| expectativaVidaRestante ||' dias.');
 END;
 
 /
